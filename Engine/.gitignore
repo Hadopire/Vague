@@ -1,5 +1,6 @@
+/Bin/
+/Build/
 /Temp/
-/Lib
 
 # Prerequisites
 *.d
@@ -33,6 +34,9 @@
 *.exe
 *.out
 *.app
+
+# Visual Studio related
+/.vs/
 
 # Linker stuff
 *.ilk
