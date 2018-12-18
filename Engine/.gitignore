@@ -33,3 +33,9 @@
 *.exe
 *.out
 *.app
+
+# Linker stuff
+*.ilk
+
+# Debugger
+*.pdb
