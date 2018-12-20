@@ -28,9 +28,11 @@ workspace ("Vague")
 	filter {}
 
 	-- Engine
-	DefineEngineProject("Engine", "StaticLib")
+	EngineName = "Engine"
+	EngineDir  = RootDir..EngineName.."/"
+	DefineEngineProject(EngineName, "StaticLib")
 
 	-- Tests
-	--DefineTestsProject("TestsEngine", TestsDir.."TestsEngine/", EngineName, EngineDir)
-		--LinkExternalLibs()
-
+	TestsResourcesName = "TestsResources"
+	TestsResourcesDir  = TestsDir..TestsResourcesName.."/"
+	DefineTestProject(TestsResourcesName, TestsResourcesDir, EngineName, EngineDir)

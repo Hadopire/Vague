@@ -11,5 +11,5 @@ function CommonCppFileSettings(_sourcesDir)
 				 _sourcesDir.."**.tpp",
 				 _sourcesDir.."**.inl"}
 	vpaths		{["*"] = _sourcesDir}
-	excludes	{_sourcesDir.."**/*.bak"}
+	excludes	{_sourcesDir.."**.bak"}
 end

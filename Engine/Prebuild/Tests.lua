@@ -1,10 +1,10 @@
 #!lua
 
 
-function DefineTestsProject(_projectName, _projectDir, _projectToTestName, _projectToTestDir)
+function DefineTestProject(_projectName, _projectDir, _projectToTestName, _projectToTestDir)
 
 	project (_projectName)
-		location (BuildDir.._projectDir)
+		location (BuildDir.._projectName.."/")
 
 		filter {}
 			kind		"WindowedApp"
@@ -12,10 +12,12 @@ function DefineTestsProject(_projectName, _projectDir, _projectToTestName, _proj
 
 			targetdir	(BinDir)
 			debugdir	(RootDir)
+			targetname	(_projectName)
 
-			CommonCppFileSettings(_projectDir..SourcesDir)
+			CommonCppFileSettings(_projectDir.."Sources/") -- TODO : changer la maniere d'appeler les sources
 
-			includedirs	{EngineDir..SourcesDir, _projectToTestDir..SourcesDir}
+			--includedirs	{_projectToTestDir.."Sources/"} -- TODO : changer la maniere d'appeler les sources
+			includedirs	{SourcesDir} -- TODO : changer la maniere d'appeler les sources
 
 			libdirs		{BinDir}
 			flags 		{"NoMinimalRebuild", "MultiProcessorCompile"}

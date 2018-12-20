@@ -12,6 +12,10 @@ SupportedConfigurations =
 	["Debug"]   = { ["supported"] = true, ["suffix"] = "_d" },
 }
 
+function GetSuffix(_platform, _config)
+
+	return SupportedPlatforms[_platform]["suffix"] .. SupportedConfigurations[_config]["suffix"]
+end
 
 function SetWorkspacePlatforms()
 
@@ -71,6 +75,6 @@ end
 function SetTargetSuffixes()
 
 	ForAllSupportedPlatformsAndConfigs( function(_platform, _config)
-		targetsuffix (SupportedPlatforms[_platform]["suffix"] .. SupportedConfigurations[_config]["suffix"])
+		targetsuffix (GetSuffix(_platform, _config))
 	end )
 end
