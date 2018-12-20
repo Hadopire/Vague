@@ -3,23 +3,23 @@
 
 namespace Vague
 {
-	class INonCopyable
-	{
-	public:
+    class INonCopyable
+    {
+    public:
 
-		INonCopyable()	= default;
-		~INonCopyable()	= default;
+        INonCopyable()  = default;
+        ~INonCopyable() = default;
 
-	private:
+    private:
 
-		INonCopyable(const INonCopyable&)				= delete;
-		INonCopyable& operator = (const INonCopyable&)	= delete;
-	};
+        INonCopyable(const INonCopyable&)              = delete;
+        INonCopyable& operator = (const INonCopyable&) = delete;
+    };
 
-	class IDefaultConstructorCallNotAllowed
-	{
-	protected:
+    class IDefaultConstructorCallNotAllowed
+    {
+    protected:
 
-		IDefaultConstructorCallNotAllowed() = default;
-	};
+        IDefaultConstructorCallNotAllowed() = default;
+    };
 }
