@@ -44,3 +44,7 @@ obj/
 
 # Debugger
 *.pdb
+
+# Vim
+*.swp
+*.swo
