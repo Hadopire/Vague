@@ -38,8 +38,8 @@
 
 namespace Vague
 {
-    void    Break();
-    void    PrintAssertInfos(const char* const _szExpression, const char* const _szFilePath, const int _iLine, const char* const _szFunction);
+    void Break();
+    void PrintAssertInfos(const char* const _szExpression, const char* const _szFilePath, const int _iLine, const char* const _szFunction);
 }
 
 #if defined (__VAGUE_DEBUG__)

@@ -12,5 +12,5 @@
 
 #   include <ostream>
 #   define VAGUE_COUT   std::cout
-    
+
 #endif

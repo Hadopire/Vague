@@ -8,12 +8,12 @@ namespace Vague
 {
     namespace Tests
     {
-        void	TestFailLog(const char* const _szFilePath, const int _iLine, const char* const _szFunction)
+        void TestFailLog(const char* const _szFilePath, const int _iLine, const char* const _szFunction)
         {
             VAGUE_COUT << "Test: Fail: " << _szFilePath << ", " << _iLine << ", " << _szFunction << std::endl;
         }
 
-        void	TestEndLog(const char* _szFunction, const u32 _iTestCount, const u32 _iSuccessful)
+        void TestEndLog(const char* _szFunction, const u32 _iTestCount, const u32 _iSuccessful)
         {
             if (_iTestCount == _iSuccessful)
             {

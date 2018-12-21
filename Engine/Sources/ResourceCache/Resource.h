@@ -4,7 +4,7 @@
 
 class Resource
 {
-  public:
+public:
     std::string m_name;
     Resource(const std::string &_name);
 };

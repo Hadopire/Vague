@@ -11,7 +11,7 @@
 
 class ResourceDirectory : public IResourceFile
 {
-  public:
+public:
     ResourceDirectory(const std::string _dirPath) { m_dirPath = _dirPath + "/"; }
     virtual ~ResourceDirectory();
 
@@ -21,7 +21,7 @@ class ResourceDirectory : public IResourceFile
     virtual int GetNumResources() const;
     virtual std::string GetResourceName(int _num) const;
 
-  private:
+private:
     std::string m_dirPath;
     std::unordered_map<std::string, std::pair<HANDLE, int>> m_dirTree;
     std::vector<std::string> m_dirFiles;

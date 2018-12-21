@@ -7,15 +7,15 @@
 
 class ResHandle
 {
-  friend class ResCache;
-  protected:
+    friend class ResCache;
+protected:
     Resource m_resource;
     char *m_buffer;
     unsigned int m_size;
     std::shared_ptr<IResourceExtraData> m_extra;
     ResCache *m_pResCache;
 
-  public:
+public:
     ResHandle(Resource &_resource, char *_buffer, unsigned int _size, ResCache *_pResCache);
     virtual ~ResHandle();
 

@@ -11,8 +11,8 @@
 
 class ResCache
 {
-  friend class ResHandle;
-  public:
+    friend class ResHandle;
+public:
     ResCache(const unsigned int _sizeInMb, IResourceFile *_resFile);
     ~ResCache();
 
@@ -22,7 +22,7 @@ class ResCache
     std::shared_ptr<ResHandle> GetHandle(Resource *_r);
     int Preload(const std::string pattern, void (*progressCallBack)(int, bool*));
     void Flush(void);
-  protected:
+protected:
     std::list<std::shared_ptr<ResHandle>> m_lru; // LRU (least recently used)
     std::map<std::string, std::shared_ptr<ResHandle>> m_resources;
     std::list<std::shared_ptr<IResourceLoader>> m_resourceLoaders;

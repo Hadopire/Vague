@@ -6,7 +6,7 @@
 
 class IResourceLoader
 {
-  public:
+public:
     virtual std::string GetPattern()=0;
     virtual bool UseRawFile()=0;
     virtual unsigned int GetLoadedResourceSize(char *_rawBuffer, unsigned int _rawSize)=0;

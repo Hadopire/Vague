@@ -4,6 +4,6 @@
 
 class IResourceExtraData
 {
-  public:
+public:
     virtual std::string ToString()=0;
 };

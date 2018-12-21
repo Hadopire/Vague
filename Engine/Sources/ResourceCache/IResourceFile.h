@@ -5,7 +5,7 @@
 
 class IResourceFile
 {
-  public:
+public:
     virtual bool Open()=0;
     virtual int GetRawResourceSize(const Resource &r)=0;
     virtual int GetRawResource(const Resource &r, char *buffer)=0;
