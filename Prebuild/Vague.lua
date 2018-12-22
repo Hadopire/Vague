@@ -155,9 +155,10 @@ Vague.ProjectCommonSettings = function(_projectDir, _projectName, _projectKind)
         Vague.FilterConfigurations("Release", function()
             warnings    "Extra"
             optimize    "Full"
-            flags       {"FatalWarnings"}
+            --flags       {"FatalWarnings"}
         end )
         Vague.FilterConfigurations("Debug", function()
+			warnings    "Default"
             symbols     "On"
         end )
         filter {}
