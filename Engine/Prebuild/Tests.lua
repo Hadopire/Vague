@@ -4,7 +4,7 @@
 function DefineTestProject(_projectName, _projectDir, _projectToTestName, _projectToTestDir)
 
 	project (_projectName)
-		location (BuildDir.._projectName.."/")
+		location (TestsBuildDir.._projectName.."/")
 
 		filter {}
 			kind		"WindowedApp"

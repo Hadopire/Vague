@@ -12,4 +12,4 @@ RootDir						= "../"
 	SourcesDir				= RootDir..SourcesName.."/"
 	TestsName				= "Tests"
 	TestsDir				= RootDir..TestsName.."/"
-	
+    TestsBuildDir           = BuildDir..TestsName.."/"

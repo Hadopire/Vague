@@ -33,6 +33,6 @@ workspace ("Vague")
 	DefineEngineProject(EngineName, "StaticLib")
 
 	-- Tests
-	TestsResourcesName = "TestsResources"
-	TestsResourcesDir  = TestsDir..TestsResourcesName.."/"
+	TestsResourcesName = "TestsResourceCache"
+	TestsResourcesDir  = TestsDir.."ResourceCache".."/"
 	DefineTestProject(TestsResourcesName, TestsResourcesDir, EngineName, EngineDir)
