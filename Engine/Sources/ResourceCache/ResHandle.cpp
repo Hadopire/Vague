@@ -1,5 +1,6 @@
-#include "ResHandle.hpp"
-#include "ResCache.hpp"
+#include "ResourceCache/ResHandle.hpp"
+
+#include "ResourceCache/ResCache.hpp"
 
 namespace Vague
 {

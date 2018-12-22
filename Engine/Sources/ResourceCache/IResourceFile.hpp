@@ -1,7 +1,8 @@
 #pragma once
 
-#include "Resource.hpp"
 #include <string>
+
+#include "ResourceCache/Resource.hpp"
 
 namespace Vague
 {

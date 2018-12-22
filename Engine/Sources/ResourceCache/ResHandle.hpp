@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Resource.hpp"
-#include "IResourceExtraData.hpp"
-
 #include <memory>
+
+#include "ResourceCache/Resource.hpp"
+#include "ResourceCache/IResourceExtraData.hpp"
 
 namespace Vague
 {

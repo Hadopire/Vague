@@ -1,9 +1,10 @@
-#include "ResCache.hpp"
-#include "ResHandle.hpp"
-#include "DefaultResourceLoader.hpp"
-#include "Utils/String.hpp"
+#include "ResourceCache/ResCache.hpp"
 
 #include <cassert>
+
+#include "ResourceCache/ResHandle.hpp"
+#include "ResourceCache/DefaultResourceLoader.hpp"
+#include "Utils/String.hpp"
 
 namespace Vague
 {

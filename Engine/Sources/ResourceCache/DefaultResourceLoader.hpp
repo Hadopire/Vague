@@ -1,6 +1,6 @@
 #pragma once
 
-#include "IResourceLoader.hpp"
+#include "ResourceCache/IResourceLoader.hpp"
 
 namespace Vague
 {

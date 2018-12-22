@@ -1,4 +1,4 @@
-#include "Win32_ResourceDirectory.hpp"
+#include "ResourceCache/Win32_ResourceDirectory.hpp"
 
 #include <Windows.h>
 

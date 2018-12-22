@@ -1,13 +1,13 @@
 #pragma once
 
-#include "IResourceFile.hpp"
-#include "Resource.hpp"
-
 #include <Windows.h>
 
 #include <unordered_map>
 #include <vector>
 #include <string>
+
+#include "ResourceCache/IResourceFile.hpp"
+#include "ResourceCache/Resource.hpp"
 
 namespace Vague
 {
