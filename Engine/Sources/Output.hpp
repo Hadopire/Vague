@@ -1,12 +1,12 @@
 #pragma once
 
 
-#include <Core.hpp>
+#include "Core.hpp"
 
 
 #if defined (__VAGUE_WINDOWS__)
 
-#   include <Win32_Output.hpp>
+#   include "Win32_Output.hpp"
 
 #else
 

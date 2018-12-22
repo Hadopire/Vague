@@ -1,5 +1,5 @@
 
-#include <Tests.hpp>
+#include <Tests/Tests.hpp>
 
 namespace Vague
 {

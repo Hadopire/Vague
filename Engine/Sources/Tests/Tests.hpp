@@ -1,7 +1,7 @@
 #pragma once
 
-#include <Core.hpp>
-#include <Types.hpp>
+#include "Core.hpp"
+#include "Types.hpp"
 
 
 namespace Vague

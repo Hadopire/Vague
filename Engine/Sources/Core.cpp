@@ -1,9 +1,9 @@
 
-#include <Core.hpp>
+#include "Core.hpp"
+
+#include "Output.hpp"
 
 #include <intrin.h> // __debugbreak()
-
-#include <Output.hpp>
 
 
 namespace Vague

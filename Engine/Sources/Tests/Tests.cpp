@@ -1,7 +1,7 @@
 
-#include <Tests.hpp>
+#include "Tests.hpp"
 
-#include <Output.hpp>
+#include "Output.hpp"
 
 
 namespace Vague
