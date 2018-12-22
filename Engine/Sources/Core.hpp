@@ -26,7 +26,7 @@
 
 #if defined (__VAGUE_WINDOWS__)
 
-#   define VAGUE_TODO(_s)                 __pragma(message(__FILE__ "(" VAGUE_STR(__LINE__) ") : A FAIRE: " _s))
+#   define VAGUE_TODO(_who, _what)      __pragma(message(__FILE__ "(" VAGUE_STR(__LINE__) ") : TODO (" _who "): " _what))
 
 #else
 
