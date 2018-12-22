@@ -1,7 +1,7 @@
 #pragma once
 
-#include "IResourceFile.h"
-#include "Resource.h"
+#include "IResourceFile.hpp"
+#include "Resource.hpp"
 
 #include <Windows.h>
 

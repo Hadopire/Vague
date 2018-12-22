@@ -1,4 +1,4 @@
-#include "Win32_ResourceDirectory.h"
+#include "Win32_ResourceDirectory.hpp"
 
 #include <Windows.h>
 
@@ -83,7 +83,7 @@ int ResourceDirectory::GetRawResource(const Resource &_resource, char *_pBuffer)
 
 int ResourceDirectory::GetNumResources() const
 {
-    return m_dirTree.size();
+    return (int)m_dirTree.size();
 }
 
 std::string ResourceDirectory::GetResourceName(int _num) const

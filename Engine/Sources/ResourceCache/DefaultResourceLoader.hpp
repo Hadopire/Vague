@@ -1,6 +1,6 @@
 #pragma once
 
-#include "IResourceLoader.h"
+#include "IResourceLoader.hpp"
 
 class DefaultResourceLoader : public IResourceLoader
 {

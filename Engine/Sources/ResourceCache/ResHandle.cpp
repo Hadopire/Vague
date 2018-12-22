@@ -1,5 +1,5 @@
-#include "ResHandle.h"
-#include "ResCache.h"
+#include "ResHandle.hpp"
+#include "ResCache.hpp"
 
 ResHandle::ResHandle(Resource &_resource, char *_buffer, unsigned int _size, ResCache *_pResCache)
     : m_resource(_resource)

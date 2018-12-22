@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ResHandle.h"
+#include "ResHandle.hpp"
 
 #include <string>
 

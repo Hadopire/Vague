@@ -1,4 +1,4 @@
-#include "Resource.h"
+#include "Resource.hpp"
 
 #include <algorithm>
 #include <cctype>

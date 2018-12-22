@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Resource.h"
-#include "IResourceExtraData.h"
+#include "Resource.hpp"
+#include "IResourceExtraData.hpp"
 
 #include <memory>
 

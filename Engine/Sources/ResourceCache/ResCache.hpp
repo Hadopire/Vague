@@ -1,8 +1,8 @@
 #pragma once
 
-#include "IResourceLoader.h"
-#include "IResourceFile.h"
-#include "Resource.h"
+#include "IResourceLoader.hpp"
+#include "IResourceFile.hpp"
+#include "Resource.hpp"
 
 #include <list>
 #include <map>

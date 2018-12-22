@@ -1,7 +1,7 @@
-#include "ResCache.h"
-#include "ResHandle.h"
-#include "DefaultResourceLoader.h"
-#include "../Utils/String.h"
+#include "ResCache.hpp"
+#include "ResHandle.hpp"
+#include "DefaultResourceLoader.hpp"
+#include "Utils/String.hpp"
 
 #include <cassert>
 

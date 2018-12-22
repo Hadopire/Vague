@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Resource.h"
+#include "Resource.hpp"
 #include <string>
 
 class IResourceFile
