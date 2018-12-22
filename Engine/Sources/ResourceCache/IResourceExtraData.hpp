@@ -2,8 +2,11 @@
 
 #include <string>
 
-class IResourceExtraData
+namespace Vague
 {
-public:
-    virtual std::string ToString()=0;
-};
+    class IResourceExtraData
+    {
+    public:
+        virtual std::string ToString()=0;
+    };
+}

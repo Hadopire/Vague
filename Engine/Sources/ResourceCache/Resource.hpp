@@ -2,9 +2,12 @@
 
 #include <string>
 
-class Resource
+namespace Vague
 {
-public:
-    std::string m_name;
-    Resource(const std::string &_name);
-};
+    class Resource
+    {
+    public:
+        std::string m_name;
+        Resource(const std::string &_name);
+    };
+}
