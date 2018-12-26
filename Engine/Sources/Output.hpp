@@ -6,7 +6,7 @@
 
 #if defined (__VAGUE_WINDOWS__)
 
-#   include "Win32_Output.hpp"
+#   include "Output_Win32.hpp"
 
 #else
 
