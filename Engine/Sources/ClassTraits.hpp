@@ -1,6 +1,21 @@
 #pragma once
 
 
+// Macros
+
+#define VAGUE_NONCOPYABLE(_Class)               \
+private:                                        \
+    _Class(const _Class&) = delete;             \
+    _Class& operator = (const _Class&) = delete;
+
+
+#define VAGUE_DEFAULTCONSTRUCTOR_NOTALLOWED(_Class) \
+protected:                                          \
+    _Class() = default;
+
+
+// Interface implementations
+
 namespace Vague
 {
     class INonCopyable
@@ -10,16 +25,11 @@ namespace Vague
         INonCopyable()  = default;
         ~INonCopyable() = default;
 
-    private:
-
-        INonCopyable(const INonCopyable&)              = delete;
-        INonCopyable& operator = (const INonCopyable&) = delete;
+        VAGUE_NONCOPYABLE(INonCopyable);
     };
 
     class IDefaultConstructorCallNotAllowed
     {
-    protected:
-
-        IDefaultConstructorCallNotAllowed() = default;
+        VAGUE_DEFAULTCONSTRUCTOR_NOTALLOWED(IDefaultConstructorCallNotAllowed);
     };
 }
