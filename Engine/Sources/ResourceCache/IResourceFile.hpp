@@ -10,10 +10,11 @@ namespace Vague
     {
     public:
         virtual bool Open()=0;
-        virtual int GetRawResourceSize(const Resource &r)=0;
-        virtual int GetRawResource(const Resource &r, char *buffer)=0;
+        virtual bool Contains(const Resource &_resource)=0;
+        virtual int GetRawResourceSize(const Resource &_resource)=0;
+        virtual int GetRawResource(const Resource &r, char *_buffer)=0;
         virtual int GetNumResources() const = 0;
-        virtual std::string GetResourceName(int num) const = 0;
+        virtual std::string GetResourceName(int _num) const = 0;
         virtual ~IResourceFile() { }
     };
 }

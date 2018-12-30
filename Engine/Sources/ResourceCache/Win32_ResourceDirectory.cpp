@@ -11,6 +11,9 @@ namespace Vague
 {
     bool ResourceDirectory::Open()
     {
+        if (m_isOpen)
+            return true;
+
         std::string pattern = m_dirPath + "*";
         std::wstring_convert<std::codecvt_utf8_utf16 <wchar_t>, wchar_t> converter;
         std::wstring wPattern = converter.from_bytes(pattern.data());
@@ -54,8 +57,17 @@ namespace Vague
         {
             //TODO(Hadopire) Properly handle error
         }
+        else
+        {
+            m_isOpen = true;
+        }
 
-        return true;
+        return m_isOpen;
+    }
+
+    bool ResourceDirectory::Contains(const Resource &_resource)
+    {
+        return (bool)m_dirTree.count(_resource.m_name);
     }
 
     int ResourceDirectory::GetRawResourceSize(const Resource &_resource)

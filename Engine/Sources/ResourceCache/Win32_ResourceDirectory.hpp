@@ -18,6 +18,7 @@ namespace Vague
         virtual ~ResourceDirectory();
 
         virtual bool Open();
+        virtual bool Contains(const Resource &_resource);
         virtual int GetRawResourceSize(const Resource &_resource);
         virtual int GetRawResource(const Resource &_resource, char *_pBuffer);
         virtual int GetNumResources() const;
@@ -27,5 +28,7 @@ namespace Vague
         std::string m_dirPath;
         std::unordered_map<std::string, std::pair<HANDLE, int>> m_dirTree;
         std::vector<std::string> m_dirFiles;
+
+        bool m_isOpen = false;
     };
 }

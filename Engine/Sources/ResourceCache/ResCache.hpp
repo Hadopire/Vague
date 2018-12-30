@@ -15,11 +15,12 @@ namespace Vague
     {
         friend class ResHandle;
     public:
-        ResCache(const unsigned int _sizeInMb, IResourceFile *_resFile);
+        ResCache(const unsigned int _sizeInMb, std::shared_ptr<IResourceFile> _resFile);
         ~ResCache();
 
         bool Init();
-        void RegisterLoader(std::shared_ptr<IResourceLoader> loader);
+        void RegisterLoader(std::shared_ptr<IResourceLoader> _loader);
+        bool RegisterResourceFile(std::shared_ptr<IResourceFile> _file);
 
         std::shared_ptr<ResHandle> GetHandle(Resource *_r);
         int Preload(const std::string pattern, void (*progressCallBack)(int, bool*));
@@ -29,8 +30,7 @@ namespace Vague
         std::map<std::string, std::shared_ptr<ResHandle>> m_resources;
         std::list<std::shared_ptr<IResourceLoader>> m_resourceLoaders;
 
-        //TODO(hadopire) allow the cache to use multiple resource files
-        IResourceFile *m_file;
+        std::list<std::shared_ptr<IResourceFile>> m_files;
 
         unsigned int m_cacheSize;
         unsigned int m_allocated;

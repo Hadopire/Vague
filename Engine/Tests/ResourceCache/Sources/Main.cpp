@@ -8,6 +8,7 @@
 
 
 static const std::string g_assetPath = "/../Assets";
+static const std::string g_subDirPath = "/../Assets/SubDirectory";
 static const int g_assetCount = 4;
 
 namespace Vague
@@ -49,7 +50,7 @@ namespace Vague
     {
         VAGUE_UTEST_INIT;
 
-        ResourceDirectory *directory = new ResourceDirectory(GetExecDir() + g_assetPath);
+        std::shared_ptr<ResourceDirectory> directory(new ResourceDirectory(GetExecDir() + g_assetPath));
         ResCache cache(1, directory);
 
         bool success = cache.Init();
@@ -99,6 +100,30 @@ namespace Vague
             // the cache made room for assets a and b
             // so our previous data should have been deleted
             VAGUE_UTEST(weakhdC.expired() == true);
+        }
+
+        std::shared_ptr<ResourceDirectory> subDirectory(new ResourceDirectory(GetExecDir() + g_subDirPath));
+
+        success = cache.RegisterResourceFile(subDirectory);
+        VAGUE_UTEST(success);
+
+        Resource OneTwoThree("123");
+
+        // loading a resource present in another ResourceFile
+        {
+            std::shared_ptr<ResHandle> hOneTwoThree = cache.GetHandle(&OneTwoThree);
+            VAGUE_UTEST(hOneTwoThree != nullptr);
+
+            char *buffer = hOneTwoThree->Buffer();
+            for (int i = 0; i < 3; ++i)
+            {
+                if (buffer[i] != '1' + (char)i)
+                {
+                    success = false;
+                    break;
+                }
+            }
+            VAGUE_UTEST(success);
         }
 
         VAGUE_UTEST_END;

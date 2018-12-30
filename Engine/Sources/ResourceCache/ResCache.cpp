@@ -8,11 +8,11 @@
 
 namespace Vague
 {
-    ResCache::ResCache(const unsigned int _sizeInMb, IResourceFile *_resFile)
+    ResCache::ResCache(const unsigned int _sizeInMb, std::shared_ptr<IResourceFile> _resFile)
     {
         m_cacheSize = _sizeInMb * 1024 * 1024;
         m_allocated = 0;
-        m_file = _resFile;
+        m_files.push_back(_resFile);
     }
 
     ResCache::~ResCache()
@@ -21,23 +21,37 @@ namespace Vague
         {
             FreeOneResource();
         }
-        delete m_file;
     }
 
     bool ResCache::Init()
     {
-        bool retValue = false;
-        if (m_file->Open())
+        bool retValue = true;
+        for (auto it = m_files.begin(); it != m_files.end(); ++it)
         {
-            RegisterLoader(std::shared_ptr<IResourceLoader>(new DefaultResourceLoader()));
-            retValue = true;
+            std::shared_ptr<IResourceFile> file = *it;
+            if (!file->Open())
+            {
+                retValue = false;
+            }
         }
+        RegisterLoader(std::shared_ptr<IResourceLoader>(new DefaultResourceLoader()));
         return retValue;
     }
 
-    void ResCache::RegisterLoader(std::shared_ptr<IResourceLoader> loader)
+    void ResCache::RegisterLoader(std::shared_ptr<IResourceLoader> _loader)
     {
-        m_resourceLoaders.push_front(loader);
+        m_resourceLoaders.push_front(_loader);
+    }
+
+    bool ResCache::RegisterResourceFile(std::shared_ptr<IResourceFile> _file)
+    {
+        bool retValue = false;
+        if (_file->Open())
+        {
+            m_files.push_back(_file);
+            retValue = true;
+        }
+        return retValue;
     }
 
     std::shared_ptr<ResHandle> ResCache::GetHandle(Resource *_r)
@@ -58,6 +72,7 @@ namespace Vague
     {
         std::shared_ptr<IResourceLoader> loader;
         std::shared_ptr<ResHandle> handle;
+        std::shared_ptr<IResourceFile> file;
 
         for (auto it = m_resourceLoaders.begin(); it != m_resourceLoaders.end(); ++it)
         {
@@ -76,7 +91,24 @@ namespace Vague
             return handle;
         }
 
-        unsigned int rawSize = m_file->GetRawResourceSize(*_r);
+        for (auto it = m_files.begin(); it != m_files.end(); ++it)
+        {
+            std::shared_ptr<IResourceFile> testFile = *it;
+            if (testFile->Contains(*_r))
+            {
+                file = testFile;
+                break;
+            }
+        }
+
+        if (!file)
+        {
+            //TODO(hadopire) properly handle error
+            assert(file);
+            return handle;
+        }
+
+        unsigned int rawSize = file->GetRawResourceSize(*_r);
         char *rawBuffer = loader->UseRawFile() ? Allocate(rawSize) : new char[rawSize];
 
         if (rawBuffer == nullptr)
@@ -84,7 +116,7 @@ namespace Vague
             //resource cache out of memory
             return std::shared_ptr<ResHandle>();
         }
-        m_file->GetRawResource(*_r, rawBuffer);
+        file->GetRawResource(*_r, rawBuffer);
         char *buffer = nullptr;
         unsigned int size = 0;
 
@@ -195,25 +227,27 @@ namespace Vague
 
     int ResCache::Preload(const std::string pattern, void (*progressCallBack)(int, bool*))
     {
-        if(m_file == nullptr)
-            return 0;
-
-        int numFiles = m_file->GetNumResources();
         int loaded = 0;
         bool cancel = false;
-        for (int i = 0; i < numFiles && !cancel; ++i)
+
+        for (auto it = m_files.begin(); it != m_files.end() && !cancel; ++it)
         {
-            Resource resource(m_file->GetResourceName(i));
-
-            if (WildcardMatch(pattern.c_str(), resource.m_name.c_str()))
+            std::shared_ptr<IResourceFile> file = *it;
+            int numFiles = file->GetNumResources();
+            for (int i = 0; i < numFiles && !cancel; ++i)
             {
-                std::shared_ptr<ResHandle> handle = GetHandle(&resource);
-                ++loaded;
-            }
+                Resource resource(file->GetResourceName(i));
 
-            if (progressCallBack != nullptr)
-            {
-                progressCallBack(i * 100 / numFiles, &cancel);
+                if (WildcardMatch(pattern.c_str(), resource.m_name.c_str()))
+                {
+                    std::shared_ptr<ResHandle> handle = GetHandle(&resource);
+                    ++loaded;
+                }
+
+                if (progressCallBack != nullptr)
+                {
+                    progressCallBack(i * 100 / numFiles, &cancel);
+                }
             }
         }
         return loaded;
