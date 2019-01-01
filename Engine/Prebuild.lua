@@ -21,3 +21,11 @@ Test.Dir = Test.CommonDir..Test.Name.."/"
 Test.ProjectName = "Test"..Test.Name
 Vague.ProjectCommonSettings(Test.Dir, Test.ProjectName, "WindowedApp")
 Vague.LibProjectDependency(Engine.Name, Engine.Name, Engine.Dir)
+
+-- SmartPtr
+
+Test.Name = "SmartPtr"
+Test.Dir = Test.CommonDir..Test.Name.."/"
+Test.ProjectName = "Test"..Test.Name
+Vague.ProjectCommonSettings(Test.Dir, Test.ProjectName, "WindowedApp")
+Vague.LibProjectDependency(Engine.Name, Engine.Name, Engine.Dir)
