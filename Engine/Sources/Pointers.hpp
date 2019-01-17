@@ -188,6 +188,15 @@ namespace Vague
         {
         }
 
+        template <class _T2,
+                  class = typename std::enable_if_t<std::is_convertible<_T2*,T*>::value,void>>
+        SharedPtr(const SharedPtr<_T2>& _p)
+            : SharedPtr(_p.Get())
+        {
+            static_assert(std::has_virtual_destructor<T>::value,
+                "Deleting from base class without virtual destructor is UndefinedBehaviour");
+        }
+
         // Destructor
         ~SharedPtr()
         {
@@ -243,4 +252,16 @@ namespace Vague
             m_ptr = pTmp;
         }
     };
+
+    template <class T, class U>
+    inline SharedPtr<T> StaticPointerCast(const SharedPtr<U> &_p)
+    {
+        return SharedPtr<T>(static_cast<T*>(_p.Get()));
+    }
+
+    template <class T, class U>
+    inline SharedPtr<T> DynamicPointerCast(const SharedPtr<U> &_p)
+    {
+        return SharedPtr<T>(dynamic_cast<T*>(_p.Get()));
+    }
 }
