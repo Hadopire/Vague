@@ -9,33 +9,62 @@
 
 namespace Vague
 {
-    // Smart pointers base class (do NOT use it)
-
     #define VAGUE_STATIC_ASSERT_NOT_ARRAY(_Class)   VAGUE_STATIC_ASSERT_MSG((!std::is_array_v<_Class>), "Do not use smart pointers with arrays!")
 
     template <class T>
-    class BaseSmartPtr
+    class PtrHandler
     {
         VAGUE_STATIC_ASSERT_NOT_ARRAY(T);
+
+        template<class U> friend class PtrHandler;
 
     public:
 
         using PtrType = std::remove_extent_t<T>;
 
         // Constructors
-        BaseSmartPtr()
+        PtrHandler()
             : m_ptr(nullptr)
         {
         }
 
-        BaseSmartPtr(BaseSmartPtr&& _p)
+        explicit PtrHandler(PtrType* _p)
+            : m_ptr(_p)
+        {
+        }
+
+        template <class U, class = typename std::enable_if_t<std::is_convertible<typename PtrHandler<U>::PtrType*, PtrType*>::value>>
+        explicit PtrHandler(typename PtrHandler<U>::PtrType* _p)
+            : m_ptr(static_cast<PtrType*>(_p))
+        {
+        }
+
+        PtrHandler(const PtrHandler& _p)
+            : m_ptr(_p.m_ptr)
+        {
+        }
+
+        template <class U, class = typename std::enable_if_t<std::is_convertible<typename PtrHandler<U>::PtrType*, PtrType*>::value>>
+        explicit PtrHandler(const PtrHandler<U>& _p)
+            : m_ptr(static_cast<PtrType*>(_p.m_ptr))
+        {
+        }
+
+        PtrHandler(PtrHandler&& _p)
             : m_ptr(_p.m_ptr)
         {
             _p.m_ptr = nullptr;
         }
 
+        template <class U, class = typename std::enable_if_t<std::is_convertible<typename PtrHandler<U>::PtrType*, PtrType*>::value>>
+        explicit PtrHandler(PtrHandler<U>&& _p)
+            : m_ptr(static_cast<PtrType*>(_p.m_ptr))
+        {
+            _p.m_ptr = nullptr;
+        }
+
         // Destructor
-        ~BaseSmartPtr()
+        ~PtrHandler()
         {
             m_ptr = nullptr;
         }
@@ -56,7 +85,7 @@ namespace Vague
 
     template <class T>
     class UniquePtr
-        : public BaseSmartPtr<T>
+        : public PtrHandler<T>
     {
         VAGUE_NONCOPYABLE(UniquePtr);
 
@@ -64,19 +93,31 @@ namespace Vague
 
         // Constructors
         UniquePtr()
-            : BaseSmartPtr<T>()
+            : PtrHandler<T>()
         {
         }
 
         explicit UniquePtr(PtrType* _p)
-            : BaseSmartPtr<T>()
+            : PtrHandler<T>(_p)
         {
-            Reset(_p);
+        }
+
+        template <class U>
+        explicit UniquePtr(typename PtrHandler<U>::PtrType* _p)
+            : PtrHandler<T>(_p)
+        {
         }
 
         UniquePtr(UniquePtr&& _p)
-            : BaseSmartPtr<T>(std::forward<BaseSmartPtr<T>>(_p))
+            : PtrHandler<T>(std::forward<PtrHandler<T>>(_p))
         {
+        }
+
+        template <class U>
+        explicit UniquePtr(UniquePtr<U>&& _p)
+            : PtrHandler<T>(std::forward<PtrHandler<U>>(_p))
+        {
+            VAGUE_STATIC_ASSERT_MSG(std::has_virtual_destructor_v<PtrType>, "Deleting from base class without virtual destructor is UndefinedBehaviour");
         }
 
         // Destructor
@@ -111,7 +152,7 @@ namespace Vague
             VAGUE_SAFE_DELETE(m_ptr);
         }
 
-        void Swap(UniquePtr& _p)
+        void Swap(UniquePtr&& _p)
         {
             PtrType* pTmp = _p.m_ptr;
             _p.m_ptr = m_ptr;
@@ -129,8 +170,11 @@ namespace Vague
 
     public:
 
-        IntrusiveRefCount() = default;
-        ~IntrusiveRefCount()
+        IntrusiveRefCount()
+            = default;
+
+        // Oh no I want to remove this virtual...
+        virtual ~IntrusiveRefCount()
         {
             // Not ok to delete it if refcount is not 0
             VAGUE_ASSERT(m_refCount == 0);
@@ -160,41 +204,61 @@ namespace Vague
 
     template <class T>
     class SharedPtr
-        : public BaseSmartPtr<T>
+        : public PtrHandler<T>
     {
         VAGUE_STATIC_ASSERT_MSG(std::is_base_of_v<Vague::IntrusiveRefCount, PtrType>, "This class must inherit from Vague::IntrusiveRefCount!");
-
+        
     public:
 
         // Constructors
         SharedPtr()
-            : BaseSmartPtr<T>()
+            : PtrHandler<T>()
         {
         }
 
         SharedPtr(PtrType* _p)
-            : BaseSmartPtr<T>()
+            : PtrHandler<T>(_p)
         {
-            Reset(_p);
+            if (_p != nullptr)
+            {
+                _p->AddRef();
+            }
+        }
+
+        template <class U>
+        explicit SharedPtr(typename PtrHandler<U>::PtrType* _p)
+            : PtrHandler<T>(_p)
+        {
+            if (_p != nullptr)
+            {
+                _p->AddRef();
+            }
         }
 
         SharedPtr(const SharedPtr& _p)
-            : SharedPtr(_p.m_ptr)
+            : PtrHandler<T>()
         {
+            Reset(_p.m_ptr);
+        }
+
+        template <class U>
+        SharedPtr(const SharedPtr<U>& _p)
+            : PtrHandler<T>()
+        {
+            VAGUE_STATIC_ASSERT_MSG(std::has_virtual_destructor_v<PtrType>, "Deleting from base class without virtual destructor is UndefinedBehaviour");
+            Reset(_p.Get());
         }
 
         SharedPtr(SharedPtr&& _p)
-            : BaseSmartPtr<T>(std::forward<BaseSmartPtr<T>>(_p))
+            : PtrHandler<T>(std::forward<PtrHandler<T>>(_p))
         {
         }
 
-        template <class _T2,
-                  class = typename std::enable_if_t<std::is_convertible<_T2*,T*>::value,void>>
-        SharedPtr(const SharedPtr<_T2>& _p)
-            : SharedPtr(_p.Get())
+        template <class U>
+        SharedPtr(SharedPtr<U>&& _p)
+            : PtrHandler<T>(std::forward<PtrHandler<U>>(_p))
         {
-            static_assert(std::has_virtual_destructor<T>::value,
-                "Deleting from base class without virtual destructor is UndefinedBehaviour");
+            VAGUE_STATIC_ASSERT_MSG(std::has_virtual_destructor_v<PtrType>, "Deleting from base class without virtual destructor is UndefinedBehaviour");
         }
 
         // Destructor

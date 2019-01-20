@@ -4,7 +4,7 @@
 #include <Output.hpp>
 
 // Uncomment it to print things
-#define VERBOSE_TEST 1
+//#define VERBOSE_TEST 1
 
 namespace Vague
 {
@@ -21,6 +21,20 @@ namespace Vague
         }
 
         u32& ref;
+    };
+
+    struct Base
+    {
+        virtual ~Base() {}
+        int i = 0;
+    };
+    struct Derived : public Base
+    {
+        int j = 0;
+    };
+    struct NotDerived
+    {
+        int j = 0;
     };
 
     u32 Tests_Unique()
@@ -47,12 +61,30 @@ namespace Vague
             VAGUE_UTEST(pUPtr01.Get() != nullptr);
             {
                 //UniquePtr<u32> pUPtr02{ pUPtr01 }; // copy constructor, must NOT compile if uncommented
+                //pUPtr01 = UniquePtr<u32>{};        // copy assignement, must NOT compile if uncommented
             }
             {
                 UniquePtr<u32> pUPtr02{ std::move(pUPtr01) }; // move constructor
                 VAGUE_UTEST(pUPtr01.Get() == nullptr);
                 VAGUE_UTEST(pUPtr02.Get() != nullptr);
             }
+        }
+
+        {
+            UniquePtr<Derived> pUPtrDerived{ new Derived() };
+            UniquePtr<Base> pUPtrBase{ std::move(pUPtrDerived) }; // move constructor
+            VAGUE_UTEST(pUPtrDerived.Get() == nullptr);
+            VAGUE_UTEST(pUPtrBase.Get() != nullptr);
+        }
+
+        {
+            UniquePtr<Base> pUPtrBase{ new Base() };
+            //UniquePtr<Derived> pUPtrDerived{ std::move(pUPtrBase) }; // must NOT compile if uncommented
+        }
+
+        {
+            UniquePtr<NotDerived> pUPtrNotDerived{ new NotDerived() };
+            //UniquePtr<Base> pUPtrBase{ std::move(pUPtrNotDerived) }; // must NOT compile if uncommented
         }
 
         VAGUE_UTEST_END;
@@ -81,6 +113,11 @@ namespace Vague
     struct NotIntrusive
     {
         u32 i = 13;
+    };
+
+    struct IntrusiveNotPrint
+        : public IntrusiveRefCount
+    {
     };
 
     u32 Tests_Shared()
@@ -140,6 +177,32 @@ namespace Vague
                 VAGUE_UTEST(pSPtr02->GetRefCount() == 1);
                 pSPtr02.Release();
             }
+        }
+
+
+        {
+            SharedPtr<IntrusivePrint> pSPtrDerived{ new IntrusivePrint() };
+            SharedPtr<IntrusiveRefCount> pSPtrBase{ pSPtrDerived }; // copy constructor
+            VAGUE_UTEST(pSPtrDerived.Get() == pSPtrBase.Get());
+            VAGUE_UTEST(pSPtrDerived->GetRefCount() == 2);
+            VAGUE_UTEST(pSPtrBase->GetRefCount() == 2);
+        }
+        {
+            SharedPtr<IntrusivePrint> pSPtrDerived{ new IntrusivePrint() };
+            SharedPtr<IntrusiveRefCount> pSPtrBase{ std::move(pSPtrDerived) }; // move constructor
+            VAGUE_UTEST(pSPtrDerived.Get() == nullptr);
+            VAGUE_UTEST(pSPtrBase.Get() != nullptr);
+            VAGUE_UTEST(pSPtrBase->GetRefCount() == 1);
+        }
+
+        {
+            SharedPtr<IntrusiveRefCount> pSPtrBase{ new IntrusiveRefCount() };
+            //SharedPtr<IntrusivePrint> pSPtrDerived{ std::move(pSPtrBase) }; // must NOT compile if uncommented
+        }
+
+        {
+            SharedPtr<IntrusiveNotPrint> pSPtrNotDerived{ new IntrusiveNotPrint() };
+            //SharedPtr<IntrusivePrint> pSPtrBase{ std::move(pSPtrNotDerived) }; // must NOT compile if uncommented
         }
 
         VAGUE_UTEST_END;
