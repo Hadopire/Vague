@@ -152,7 +152,7 @@ namespace Vague
             VAGUE_SAFE_DELETE(m_ptr);
         }
 
-        void Swap(UniquePtr&& _p)
+        void Swap(UniquePtr& _p)
         {
             PtrType* pTmp = _p.m_ptr;
             _p.m_ptr = m_ptr;
@@ -206,7 +206,8 @@ namespace Vague
     class SharedPtr
         : public PtrHandler<T>
     {
-        VAGUE_STATIC_ASSERT_MSG(std::is_base_of_v<Vague::IntrusiveRefCount, PtrType>, "This class must inherit from Vague::IntrusiveRefCount!");
+        // How to be sure the class inherits from IntrusiveRefCount, while accepting use of forward declared class?
+        //VAGUE_STATIC_ASSERT_MSG(std::is_base_of_v<Vague::IntrusiveRefCount, PtrType>, "This class must inherit from Vague::IntrusiveRefCount!");
         
     public:
 
@@ -216,7 +217,7 @@ namespace Vague
         {
         }
 
-        SharedPtr(PtrType* _p)
+        explicit SharedPtr(PtrType* _p)
             : PtrHandler<T>(_p)
         {
             if (_p != nullptr)
@@ -242,7 +243,7 @@ namespace Vague
         }
 
         template <class U>
-        SharedPtr(const SharedPtr<U>& _p)
+        explicit SharedPtr(const SharedPtr<U>& _p)
             : PtrHandler<T>()
         {
             VAGUE_STATIC_ASSERT_MSG(std::has_virtual_destructor_v<PtrType>, "Deleting from base class without virtual destructor is UndefinedBehaviour");
@@ -255,7 +256,7 @@ namespace Vague
         }
 
         template <class U>
-        SharedPtr(SharedPtr<U>&& _p)
+        explicit SharedPtr(SharedPtr<U>&& _p)
             : PtrHandler<T>(std::forward<PtrHandler<U>>(_p))
         {
             VAGUE_STATIC_ASSERT_MSG(std::has_virtual_destructor_v<PtrType>, "Deleting from base class without virtual destructor is UndefinedBehaviour");
