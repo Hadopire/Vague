@@ -30,7 +30,7 @@ Test.ProjectName = "Test"..Test.Name
 Vague.ProjectCommonSettings(Test.Dir, Test.ProjectName, "WindowedApp")
 Vague.LibProjectDependency(Engine.Name, Engine.Name, Engine.Dir)
 
--- SmartPtr
+-- EventManager
 
 Test.Name = "Events"
 Test.Dir = Test.CommonDir..Test.Name.."/"
